@@ -1,0 +1,292 @@
+version: 2
+
+models:
+  - name: stg_thelook__users
+    description: "Users table for fictitious E-Commerce Company"
+    columns:
+      - name: id
+        description: The primary key for this table
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        description: "First Name of User"
+        tests:
+          - not_null
+      - name: last_name
+        description: "Last Name of User"
+        tests:
+          - not_null
+      - name: email
+        description: "Email of User"
+        tests:
+          - not_null
+      - name: age
+        description: "Age of User"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Male", "Female"]
+      - name: city
+        description: "City of User"
+        tests:
+          - not_null
+      - name: state
+        description: "State of user"
+        tests:
+          - not_null
+      - name: country
+        description: "Country of User"
+        tests:
+          - not_null
+      - name: zip
+        description: "Postal Code of User"
+        tests:
+          - not_null
+      - name: latitude
+        description: "Latitude Coodrinate"
+        tests:
+          - not_null
+      - name: longitude
+        description: "Longitude Coordinate"
+        tests:
+          - not_null
+      - name: gender
+        description: "Gender of User"
+        tests:
+          - not_null
+      - name: created_at
+        description: "When users first signed up for their account"
+        tests:
+          - not_null
+      - name: traffic_source
+        description: "Where users signed up from"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Email", "Display", "Organic", "Facebook", "Search"]
+
+  - name: stg_thelook__orders
+    description: "Online Orders for Ficitious E-Commerce Company"
+    columns:
+      - name: order_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "The primary key for this table"
+        tests:
+          - not_null
+          - relationships: #every user_id in the Orders table comes exists in the Users table
+              to: ref('users')
+              field: id
+      - name: status
+        description: "The primary key for this table"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Complete", "Returned", "Cancelled"]
+      - name: gender
+        description: "The primary key for this table"
+        tests:
+          - not_null
+      - name: created_at
+        description: "The primary key for this table"
+        tests:
+          - not_null
+      - name: returned_at
+        description: "Date item(s) from an order were returned, NULL if not returned"
+      - name: shipped_at
+        description: "The primary key for this table"
+      - name: delivered_at
+        description: "The primary key for this table"
+      - name: num_of_item
+        description: "Number of Items in order"
+        tests:
+          - not_null
+
+  - name: stg_thelook__inventory_items
+    description: "Table tracking inventory of products"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: "ID from Products Table"
+        tests:
+          - not_null
+          - relationships: #every product in the Inventory Items table comes exists in the Products table
+              to: ref('products')
+              field: id
+      - name: created_at
+        description: "Timestamp of when inventory record was added to system"
+        tests:
+          - not_null
+      - name: sold_at
+        description: "Timestamp of when inventory record was sold or removed from system"
+        tests:
+          - not_null
+      - name: cost
+        description: "Cost for Product"
+        tests:
+          - not_null
+      - name: product_category
+        description: "Category of Product"
+      - name: product_name
+        description: "Name of Product"
+      - name: product_brand
+        description: "Brand of product"
+      - name: product_retail_price
+        description: "Retail Price of Product"
+      - name: product_department
+        description: "Department of Product"
+      - name: product_sku
+        description: "SKU of Product"
+      - name: product_distribution_center_id
+        description: "Distribution Center ID of Product"
+
+  - name: stg_thelook__products
+    description: "Products Table of a Ficitious E-Commerce Company"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: cost
+        description: "Cost of Item"
+        tests:
+          - not_null
+      - name: category
+        description: "Category of Item"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [
+                  "Accessories",
+                  "Plus",
+                  "Swim",
+                  "Active",
+                  "Socks & Hosiery",
+                  "Socks",
+                  "Dresses",
+                ]
+      - name: name
+        description: "Name of Product"
+        tests:
+          - not_null
+      - name: brand
+        description: "Brand of Product"
+        tests:
+          - not_null
+      - name: retail_price
+        description: "Price from retailer"
+      - name: department
+        description: "Department product belongs to"
+      - name: sku
+        description: "SKU of product"
+        tests:
+          - unique
+      - name: distribution_center_id
+        description: "Distribution Center ID"
+        # tests:
+        #     - is_greater_than_equal_one
+        #     - not_null
+
+  - name: stg_thelook__events
+    description: "Web Events on E-Commerce Site"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: sequence_number
+        description: "Event Sequence"
+        tests:
+          - not_null
+      - name: session_id
+        description: "Session ID"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Timestamp of Web Event"
+        tests:
+          - not_null
+      - name: ip_address
+        description: "IP Address from requestor"
+      - name: city
+        description: "City of Requestor"
+      - name: state
+        description: "State of Requestor"
+      - name: country
+        description: "Country of Requestor"
+      - name: zip
+        description: "Zip/Postal Code of Requestor"
+      - name: latitude
+        description: "Latitude of Requestor"
+      - name: longitude
+        description: "Longitude of Requestor"
+      - name: os
+        description: "Operatoring System of Requestor"
+      - name: browser
+        description: "Browser of Requestor"
+      - name: traffic_source
+        description: "Traffic Source of Requestor"
+      - name: user_id
+        description: "User ID of Event"
+        tests:
+          - relationships: #every user_id in the Events table comes exists in the Users table
+              to: ref('users')
+              field: id
+
+  - name: stg_thelook__order_items
+    description: "Line Item Grain for orders"
+    columns:
+      - name: id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "ID mapped to specific order"
+        tests:
+          - not_null
+      - name: session_id
+        description: "Session ID"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Timestamp of Web Event"
+        tests:
+          - not_null
+          - relationships: #every user_id in the Events table comes exists in the Users table
+              to: ref('orders')
+              field: order_id
+      - name: inventory_item_id
+        description: "ID of Product within Inventory Table"
+        tests:
+          - not_null
+          - relationships: #every user_id in the Events table comes exists in the Users table
+              to: ref('inventory_items')
+              field: id
+      - name: sale_price
+        description: "Sale Price of Item"
+      - name: status
+        description: "Status of Order Item"
+        tests:
+          - accepted_values:
+              values:
+                ["Cancelled", "Processing", "Complete", "Returned", "Shipped"]
+      - name: created_at
+        description: "Timestamp of when item was placed"
+      - name: returned_at
+        description: "Timestamp of when item was placed, NULL if item wasn't returned"
+      - name: shipped_at
+        description: "Timestamp of when item was shipped, NULL if item wasn't shipped yet"
+      - name: delivered_at
+        description: "Timestamp of when item was delivered, NULL if item wasn't delivered yet"

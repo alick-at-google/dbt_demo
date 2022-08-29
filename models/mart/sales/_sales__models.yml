@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: users_orders_by_region
+    description: "Users table for fictitious E-Commerce Company"
+    columns:
+      - name: id
+        description: The primary key for this table
+        tests:
+          - unique
+          - not_null
+      - name: state
+        description: "State of Shipping Address"
+        tests:
+          - not_null
+      - name: country
+        description: "Country of Shipping Address"
+        tests:
+          - not_null
+      - name: zip
+        description: "Postal Code of Shipping Address"
+        tests:
+          - not_null
+      - name: order_id
+        description: "Order ID Associated with Purchase"
+        tests:
+          - not_null
+          - relationships: #every order_id in the Orders by Region table exists in the Orders table
+              to: ref('stg_thelook__orders')
+              field: id
+      - name: user_id
+        description: "User ID Associated with Customer Purchase"
+        tests:
+          - not_null
+          - relationships: #every user_id in the Orders by Region table exists in the Users table
+              to: ref('stg_thelook__users')
+              field: id
+      - name: status
+        description: "Status of Order"
+        tests:
+          - not_null
+      - name: gender
+        description: "Gender of Customer"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Timestamp when order was placed"
+        tests:
+          - not_null
+      - name: returned_at
+        description: "Timestamp when order was returned, NULL if not returned"
+      - name: shipped_at
+        description: "Timestamp when order was shipped after being processed, NULL if not shipped"
+      - name: delivered_at
+        description: "Timestamp when order was delivered, NULL if not delivered"
+      - name: num_of_items
+        description: "Quantity of Items in Order"
+        tests:
+          - not_null
